@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <RootNamespace>Payment.Api</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Payment.Application\Payment.Application.csproj" />
+    <ProjectReference Include="..\Payment.Infrastructure\Payment.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Observability\BuildingBlocks.Observability.csproj" />
+  </ItemGroup>
+</Project>

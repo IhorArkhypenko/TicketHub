@@ -56,7 +56,7 @@ credentials and how to run the full app stack.
 - [x] **Phase 1** — Catalog (Clean Architecture reference: EF Core, Redis cache-aside, REST+Swagger, gRPC, tests)
 - [x] **Phase 2** — Identity (Duende, OAuth2 + PKCE) + Gateway (YARP, edge JWT validation, rate limiting)
 - [x] **Phase 3** — Async backbone (MassTransit + RabbitMQ, Transactional Outbox/Inbox, versioned contracts)
-- [ ] Phase 4 — Payment
+- [x] **Phase 4** — Payment (idempotent consumer by business key, Outbox-published outcomes)
 - [ ] Phase 5 — Booking + Saga (DDD-rich)
 - [ ] Phase 6 — Notifications (MongoDB)
 - [ ] Phase 7 — Full observability

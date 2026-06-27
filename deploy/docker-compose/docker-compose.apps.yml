@@ -57,6 +57,29 @@ services:
         condition: service_started
     networks: [tickethub]
 
+  payment:
+    build:
+      context: ../..
+      dockerfile: src/Services/Payment/Payment.Api/Dockerfile
+    container_name: tickethub-payment
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__PaymentDb: "Host=postgres;Port=5432;Database=payment;Username=tickethub;Password=tickethub"
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: tickethub
+      RabbitMq__Password: tickethub
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "5103:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [tickethub]
+
   gateway:
     build:
       context: ../..
