@@ -14,6 +14,7 @@
     <PackageReference Include="MassTransit" />
     <PackageReference Include="MassTransit.EntityFrameworkCore" />
     <PackageReference Include="Grpc.Net.ClientFactory" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
   </ItemGroup>
 </Project>

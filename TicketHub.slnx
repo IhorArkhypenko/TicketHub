@@ -42,6 +42,9 @@
     <Project Path="src/Services/Payment/Payment.Infrastructure/Payment.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />
+  <Folder Name="/tests/Architecture/">
+    <Project Path="tests/Architecture/TicketHub.ArchitectureTests/TicketHub.ArchitectureTests.csproj" />
+  </Folder>
   <Folder Name="/tests/Booking/">
     <Project Path="tests/Booking/Booking.SagaTests/Booking.SagaTests.csproj" />
     <Project Path="tests/Booking/Booking.UnitTests/Booking.UnitTests.csproj" />
@@ -56,5 +59,8 @@
   <Folder Name="/tests/Payment/">
     <Project Path="tests/Payment/Payment.IntegrationTests/Payment.IntegrationTests.csproj" />
     <Project Path="tests/Payment/Payment.UnitTests/Payment.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Resilience/">
+    <Project Path="tests/Resilience/TicketHub.ResilienceTests/TicketHub.ResilienceTests.csproj" />
   </Folder>
 </Solution>

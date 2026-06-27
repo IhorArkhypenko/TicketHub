@@ -36,8 +36,17 @@ public static class DependencyInjection
         services.AddScoped<CancelOnTimeoutActivity>();
         services.AddScoped<RejectBookingActivity>();
 
-        string grpcAddress = configuration["Catalog:GrpcAddress"] ?? "http://localhost:5101";
-        services.AddGrpcClient<CatalogSeatCheck.CatalogSeatCheckClient>(o => o.Address = new Uri(grpcAddress));
+        string grpcAddress = configuration["Catalog:GrpcAddress"] ?? "http://localhost:5111";
+        services.AddGrpcClient<CatalogSeatCheck.CatalogSeatCheckClient>(o => o.Address = new Uri(grpcAddress))
+            // Retry (transient), per-attempt timeout and a circuit breaker on the synchronous
+            // Catalog dependency, so a flaky/slow Catalog doesn't cascade into Booking.
+            .AddStandardResilienceHandler(options =>
+            {
+                options.Retry.MaxRetryAttempts = 3;
+                options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(5);
+                options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
+                options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(20);
+            });
 
         AddBookingMessaging(services, configuration);
 

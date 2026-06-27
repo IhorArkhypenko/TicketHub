@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><IsPackable>false</IsPackable><IsTestProject>true</IsTestProject></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Catalog\Catalog.Domain\Catalog.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Catalog\Catalog.Application\Catalog.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Booking\Booking.Domain\Booking.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Booking\Booking.Application\Booking.Application.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Payment\Payment.Domain\Payment.Domain.csproj" />
+    <ProjectReference Include="..\..\..\src\Services\Notifications\Notifications.Domain\Notifications.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+</Project>

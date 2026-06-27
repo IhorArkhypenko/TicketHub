@@ -60,5 +60,5 @@ credentials and how to run the full app stack.
 - [x] **Phase 5** — Booking + Saga (rich aggregate invariants, MassTransit orchestration, compensations, hold timeout, Redis-locked seat race)
 - [x] **Phase 6** — Notifications (MongoDB document consumer, templated, idempotent, history by user)
 - [x] **Phase 7** — Full observability (end-to-end trace across HTTP/gRPC/RabbitMQ, log↔trace correlation, Grafana dashboard, business metrics)
-- [ ] Phase 8 — Resilience & architecture tests
+- [x] **Phase 8** — Resilience (Polly retry/timeout/circuit breaker on gRPC) & NetArchTest architecture tests
 - [ ] Phase 9 — CI/CD & Kubernetes

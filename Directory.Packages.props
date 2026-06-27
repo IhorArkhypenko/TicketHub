@@ -80,6 +80,12 @@
     <PackageVersion Include="Google.Protobuf" Version="3.28.2" />
   </ItemGroup>
 
+  <!-- Resilience (Polly / Microsoft.Extensions.Resilience) -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.Extensions.Http.Resilience" Version="8.10.0" />
+    <PackageVersion Include="Microsoft.Extensions.Resilience" Version="8.10.0" />
+  </ItemGroup>
+
   <!-- API versioning -->
   <ItemGroup>
     <PackageVersion Include="Asp.Versioning.Mvc" Version="8.1.0" />
