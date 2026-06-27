@@ -57,7 +57,8 @@ services:
     networks: [tickethub]
 
   rabbitmq:
-    image: rabbitmq:3.13-management
+    # MassTransit image = rabbitmq:3-management + delayed-message-exchange plugin (Saga hold-timeout).
+    image: masstransit/rabbitmq:latest
     container_name: tickethub-rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: tickethub

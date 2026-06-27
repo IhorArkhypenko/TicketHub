@@ -12,6 +12,8 @@ public static class IdentityConfig
 {
     public const string CatalogApiScope = "catalog.api";
     public const string CatalogApiResource = "catalog";
+    public const string BookingApiScope = "booking.api";
+    public const string BookingApiResource = "booking";
 
     public static IEnumerable<IdentityResource> IdentityResources =>
     [
@@ -21,7 +23,8 @@ public static class IdentityConfig
 
     public static IEnumerable<ApiScope> ApiScopes =>
     [
-        new ApiScope(CatalogApiScope, "Catalog API")
+        new ApiScope(CatalogApiScope, "Catalog API"),
+        new ApiScope(BookingApiScope, "Booking API")
     ];
 
     public static IEnumerable<ApiResource> ApiResources =>
@@ -29,6 +32,10 @@ public static class IdentityConfig
         new ApiResource(CatalogApiResource, "Catalog API")
         {
             Scopes = { CatalogApiScope }
+        },
+        new ApiResource(BookingApiResource, "Booking API")
+        {
+            Scopes = { BookingApiScope }
         }
     ];
 
@@ -56,7 +63,8 @@ public static class IdentityConfig
             {
                 IdentityServerConstants.StandardScopes.OpenId,
                 IdentityServerConstants.StandardScopes.Profile,
-                CatalogApiScope
+                CatalogApiScope,
+                BookingApiScope
             }
         },
 
@@ -68,7 +76,7 @@ public static class IdentityConfig
             ClientName = "TicketHub Machine",
             AllowedGrantTypes = GrantTypes.ClientCredentials,
             ClientSecrets = { new Secret("secret".Sha256()) },
-            AllowedScopes = { CatalogApiScope }
+            AllowedScopes = { CatalogApiScope, BookingApiScope }
         }
     ];
 }

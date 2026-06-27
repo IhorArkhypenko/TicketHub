@@ -21,4 +21,10 @@ public static class BookingErrors
 
     public static readonly Error AlreadyTerminal =
         Error.Conflict("Booking.AlreadyTerminal", "The booking has already reached a terminal state.");
+
+    public static readonly Error SeatNotFound =
+        Error.NotFound("Booking.SeatNotFound", "The requested seat does not exist.");
+
+    public static readonly Error SeatUnavailable =
+        Error.Conflict("Booking.SeatUnavailable", "The requested seat is not available.");
 }

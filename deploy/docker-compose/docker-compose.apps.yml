@@ -80,6 +80,36 @@ services:
         condition: service_healthy
     networks: [tickethub]
 
+  booking:
+    build:
+      context: ../..
+      dockerfile: src/Services/Booking/Booking.Api/Dockerfile
+    container_name: tickethub-booking
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__BookingDb: "Host=postgres;Port=5432;Database=booking;Username=tickethub;Password=tickethub"
+      Identity__Authority: http://identity:8080
+      Catalog__GrpcAddress: http://catalog:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: tickethub
+      RabbitMq__Password: tickethub
+      Booking__HoldTimeoutSeconds: "120"
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "5104:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      catalog:
+        condition: service_started
+      identity:
+        condition: service_started
+    networks: [tickethub]
+
   gateway:
     build:
       context: ../..

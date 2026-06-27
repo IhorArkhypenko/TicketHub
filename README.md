@@ -57,7 +57,7 @@ credentials and how to run the full app stack.
 - [x] **Phase 2** — Identity (Duende, OAuth2 + PKCE) + Gateway (YARP, edge JWT validation, rate limiting)
 - [x] **Phase 3** — Async backbone (MassTransit + RabbitMQ, Transactional Outbox/Inbox, versioned contracts)
 - [x] **Phase 4** — Payment (idempotent consumer by business key, Outbox-published outcomes)
-- [ ] Phase 5 — Booking + Saga (DDD-rich)
+- [x] **Phase 5** — Booking + Saga (rich aggregate invariants, MassTransit orchestration, compensations, hold timeout, Redis-locked seat race)
 - [ ] Phase 6 — Notifications (MongoDB)
 - [ ] Phase 7 — Full observability
 - [ ] Phase 8 — Resilience & architecture tests
