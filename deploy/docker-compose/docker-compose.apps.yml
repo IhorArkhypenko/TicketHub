@@ -1,0 +1,34 @@
+name: tickethub
+
+# Application services. Use together with the infrastructure compose file:
+#   docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d --build
+# Services attach to the shared "tickethub" network defined in docker-compose.yml.
+
+services:
+  catalog:
+    build:
+      context: ../..
+      dockerfile: src/Services/Catalog/Catalog.Api/Dockerfile
+    container_name: tickethub-catalog
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "5101:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      loki:
+        condition: service_started
+      tempo:
+        condition: service_started
+    networks: [tickethub]
+
+networks:
+  tickethub:
+    external: true
+    name: tickethub

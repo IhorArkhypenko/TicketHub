@@ -1,0 +1,26 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # TicketHub services expose OpenTelemetry metrics on /metrics.
+  - job_name: tickethub-services
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "catalog:8080"
+        labels:
+          app: tickethub
+    # Services started outside compose (dotnet run) are reachable via the host.
+  - job_name: tickethub-services-host
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - "host.docker.internal:5101"
+        labels:
+          app: tickethub
+          source: host
