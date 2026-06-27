@@ -39,6 +39,9 @@ services:
       ConnectionStrings__CatalogDb: "Host=postgres;Port=5432;Database=catalog;Username=tickethub;Password=tickethub"
       ConnectionStrings__Redis: "redis:6379"
       Identity__Authority: http://identity:8080
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: tickethub
+      RabbitMq__Password: tickethub
       Observability__Loki__Endpoint: http://loki:3100
       Observability__Otlp__Endpoint: http://tempo:4317
     ports:
@@ -47,6 +50,8 @@ services:
       postgres:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      rabbitmq:
         condition: service_healthy
       identity:
         condition: service_started

@@ -1,6 +1,8 @@
+using BuildingBlocks.Infrastructure.Messaging;
 using BuildingBlocks.Observability.HealthChecks;
 using Catalog.Application.Abstractions;
 using Catalog.Infrastructure.Caching;
+using Catalog.Infrastructure.Messaging;
 using Catalog.Infrastructure.Persistence;
 using Catalog.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -32,6 +34,9 @@ public static class DependencyInjection
         IConnectionMultiplexer multiplexer = ConnectionMultiplexer.Connect(redis);
         services.AddSingleton(multiplexer);
         services.AddSingleton<ICatalogCache, RedisCatalogCache>();
+
+        services.AddScoped<IEventPublisher, EventPublisher>();
+        services.AddTicketHubMassTransit<CatalogDbContext>(configuration);
 
         services.AddTicketHubHealthChecks()
             .AddNpgSql(postgres, name: "postgres", tags: new[] { HealthCheckExtensions.ReadyTag })

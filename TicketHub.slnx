@@ -7,6 +7,7 @@
     <Project Path="src/BuildingBlocks/BuildingBlocks.Observability/BuildingBlocks.Observability.csproj" />
   </Folder>
   <Folder Name="/src/Contracts/">
+    <Project Path="src/Contracts/Contracts.Events/Contracts.Events.csproj" />
     <Project Path="src/Contracts/Contracts.Protos/Contracts.Protos.csproj" />
   </Folder>
   <Folder Name="/src/Services/" />

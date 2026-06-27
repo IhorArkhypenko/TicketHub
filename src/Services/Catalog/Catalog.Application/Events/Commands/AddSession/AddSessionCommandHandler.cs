@@ -5,6 +5,7 @@ using Catalog.Domain;
 using Catalog.Domain.Events;
 using Catalog.Domain.Seats;
 using Catalog.Domain.ValueObjects;
+using Contracts.Events.Catalog.V1;
 
 namespace Catalog.Application.Events.Commands.AddSession;
 
@@ -14,17 +15,20 @@ internal sealed class AddSessionCommandHandler : ICommandHandler<AddSessionComma
     private readonly ISeatRepository _seats;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICatalogCache _cache;
+    private readonly IEventPublisher _publisher;
 
     public AddSessionCommandHandler(
         IEventRepository events,
         ISeatRepository seats,
         IUnitOfWork unitOfWork,
-        ICatalogCache cache)
+        ICatalogCache cache,
+        IEventPublisher publisher)
     {
         _events = events;
         _seats = seats;
         _unitOfWork = unitOfWork;
         _cache = cache;
+        _publisher = publisher;
     }
 
     public async Task<Result<Guid>> Handle(AddSessionCommand request, CancellationToken cancellationToken)
@@ -61,6 +65,13 @@ internal sealed class AddSessionCommandHandler : ICommandHandler<AddSessionComma
         }
 
         _seats.AddRange(newSeats);
+
+        // Publish through the transactional outbox: the integration event is persisted in the
+        // same SaveChanges as the seats, so it cannot be lost nor sent without the state change.
+        await _publisher.PublishAsync(
+            new SessionScheduled(@event.Id, session.Id, session.StartsAtUtc, newSeats.Count, DateTime.UtcNow),
+            cancellationToken);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _cache.RemoveAsync(CatalogCacheKeys.EventList, cancellationToken);
