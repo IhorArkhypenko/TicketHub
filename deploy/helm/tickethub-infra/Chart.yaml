@@ -1,0 +1,6 @@
+apiVersion: v2
+name: tickethub-infra
+description: Local infrastructure for TicketHub (PostgreSQL, Redis, RabbitMQ, MongoDB)
+type: application
+version: 0.1.0
+appVersion: "1.0"

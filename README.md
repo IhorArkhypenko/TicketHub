@@ -61,4 +61,13 @@ credentials and how to run the full app stack.
 - [x] **Phase 6** — Notifications (MongoDB document consumer, templated, idempotent, history by user)
 - [x] **Phase 7** — Full observability (end-to-end trace across HTTP/gRPC/RabbitMQ, log↔trace correlation, Grafana dashboard, business metrics)
 - [x] **Phase 8** — Resilience (Polly retry/timeout/circuit breaker on gRPC) & NetArchTest architecture tests
-- [ ] Phase 9 — CI/CD & Kubernetes
+- [x] **Phase 9** — CI/CD (GitHub Actions) + Kubernetes manifests + Helm infra chart + Minikube deploy
+
+## Deploy to Kubernetes
+
+```bash
+deploy/minikube-deploy.sh   # infra via Helm, services via manifests, into Minikube
+```
+
+See [`deploy/k8s/README.md`](deploy/k8s/README.md). CI runs build + all tests on every PR
+([`.github/workflows/ci.yml`](.github/workflows/ci.yml)).

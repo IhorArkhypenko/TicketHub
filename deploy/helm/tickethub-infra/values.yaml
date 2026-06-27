@@ -1,0 +1,19 @@
+namespace: tickethub
+
+credentials:
+  username: tickethub
+  password: tickethub
+
+postgres:
+  image: postgres:16-alpine
+  databases: [catalog, identity, payment, booking]
+
+redis:
+  image: redis:7-alpine
+
+rabbitmq:
+  # Includes the delayed-message-exchange plugin used by the Booking Saga hold timeout.
+  image: masstransit/rabbitmq:latest
+
+mongo:
+  image: mongo:7

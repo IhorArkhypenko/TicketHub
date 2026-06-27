@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tickethub-config
+  namespace: tickethub
+data:
+  ASPNETCORE_ENVIRONMENT: "Development"
+  ASPNETCORE_URLS: "http://+:8080"
+  RabbitMq__Host: "rabbitmq"
+  RabbitMq__Username: "tickethub"
+  Identity__Authority: "http://identity:8080"
+  IdentityServer__IssuerUri: "http://identity:8080"
+  Catalog__GrpcAddress: "http://catalog:8081"
+  ReverseProxy__Clusters__catalog__Destinations__primary__Address: "http://catalog:8080/"
+  Observability__Loki__Endpoint: "http://loki:3100"
+  Observability__Otlp__Endpoint: "http://tempo:4317"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: tickethub-secret
+  namespace: tickethub
+type: Opaque
+stringData:
+  # Demo credentials only — real values are injected by the platform in a real deployment.
+  RabbitMq__Password: "tickethub"
+  ConnectionStrings__CatalogDb: "Host=postgres;Port=5432;Database=catalog;Username=tickethub;Password=tickethub"
+  ConnectionStrings__IdentityDb: "Host=postgres;Port=5432;Database=identity;Username=tickethub;Password=tickethub"
+  ConnectionStrings__PaymentDb: "Host=postgres;Port=5432;Database=payment;Username=tickethub;Password=tickethub"
+  ConnectionStrings__BookingDb: "Host=postgres;Port=5432;Database=booking;Username=tickethub;Password=tickethub"
+  ConnectionStrings__Redis: "redis:6379"
+  ConnectionStrings__Mongo: "mongodb://tickethub:tickethub@mongo:27017/?authSource=admin"

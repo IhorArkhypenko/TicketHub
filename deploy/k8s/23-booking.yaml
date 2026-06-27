@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: booking
+  namespace: tickethub
+  labels: { app: booking }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: booking }
+  template:
+    metadata:
+      labels: { app: booking }
+    spec:
+      containers:
+        - name: booking
+          image: tickethub/booking:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - { name: http, containerPort: 8080 }
+          envFrom:
+            - configMapRef: { name: tickethub-config }
+            - secretRef: { name: tickethub-secret }
+          readinessProbe:
+            httpGet: { path: /health/ready, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health/live, port: 8080 }
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          resources:
+            requests: { cpu: 50m, memory: 128Mi }
+            limits: { cpu: 500m, memory: 512Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: booking
+  namespace: tickethub
+  labels: { app: booking }
+spec:
+  selector: { app: booking }
+  ports:
+    - { name: http, port: 8080, targetPort: 8080 }

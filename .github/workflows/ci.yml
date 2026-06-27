@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    name: Build & test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          # 9.0.x SDK understands the .slnx solution format and builds the net8.0 projects.
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Restore
+        run: dotnet restore TicketHub.slnx
+
+      - name: Build
+        run: dotnet build TicketHub.slnx -c Release --no-restore
+
+      # Unit / architecture / resilience tests (fast, no containers).
+      - name: Unit & architecture tests
+        run: |
+          dotnet test tests/Catalog/Catalog.UnitTests/Catalog.UnitTests.csproj -c Release --no-build
+          dotnet test tests/Payment/Payment.UnitTests/Payment.UnitTests.csproj -c Release --no-build
+          dotnet test tests/Booking/Booking.UnitTests/Booking.UnitTests.csproj -c Release --no-build
+          dotnet test tests/Booking/Booking.SagaTests/Booking.SagaTests.csproj -c Release --no-build
+          dotnet test tests/Architecture/TicketHub.ArchitectureTests/TicketHub.ArchitectureTests.csproj -c Release --no-build
+          dotnet test tests/Resilience/TicketHub.ResilienceTests/TicketHub.ResilienceTests.csproj -c Release --no-build
+
+      # Integration tests use Testcontainers (Docker is available on the runner).
+      - name: Integration tests
+        run: |
+          dotnet test tests/Catalog/Catalog.IntegrationTests/Catalog.IntegrationTests.csproj -c Release --no-build
+          dotnet test tests/Payment/Payment.IntegrationTests/Payment.IntegrationTests.csproj -c Release --no-build
+          dotnet test tests/Notifications/Notifications.IntegrationTests/Notifications.IntegrationTests.csproj -c Release --no-build
+
+  build-images:
+    name: Build Docker images
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    strategy:
+      matrix:
+        service:
+          - { name: catalog, dockerfile: src/Services/Catalog/Catalog.Api/Dockerfile }
+          - { name: identity, dockerfile: src/Services/Identity/Identity.Api/Dockerfile }
+          - { name: gateway, dockerfile: src/Services/Gateway/Gateway/Dockerfile }
+          - { name: payment, dockerfile: src/Services/Payment/Payment.Api/Dockerfile }
+          - { name: booking, dockerfile: src/Services/Booking/Booking.Api/Dockerfile }
+          - { name: notifications, dockerfile: src/Services/Notifications/Notifications.Api/Dockerfile }
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build ${{ matrix.service.name }} image
+        run: docker build -f ${{ matrix.service.dockerfile }} -t tickethub/${{ matrix.service.name }}:${{ github.sha }} .
