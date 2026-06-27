@@ -11,6 +11,9 @@
     <Project Path="src/Contracts/Contracts.Protos/Contracts.Protos.csproj" />
   </Folder>
   <Folder Name="/src/Services/" />
+  <Folder Name="/src/Services/Booking/">
+    <Project Path="src/Services/Booking/Booking.Domain/Booking.Domain.csproj" />
+  </Folder>
   <Folder Name="/src/Services/Catalog/">
     <Project Path="src/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
     <Project Path="src/Services/Catalog/Catalog.Application/Catalog.Application.csproj" />
@@ -30,6 +33,9 @@
     <Project Path="src/Services/Payment/Payment.Infrastructure/Payment.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/" />
+  <Folder Name="/tests/Booking/">
+    <Project Path="tests/Booking/Booking.UnitTests/Booking.UnitTests.csproj" />
+  </Folder>
   <Folder Name="/tests/Catalog/">
     <Project Path="tests/Catalog/Catalog.IntegrationTests/Catalog.IntegrationTests.csproj" />
     <Project Path="tests/Catalog/Catalog.UnitTests/Catalog.UnitTests.csproj" />
