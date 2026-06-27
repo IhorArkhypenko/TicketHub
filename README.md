@@ -59,6 +59,6 @@ credentials and how to run the full app stack.
 - [x] **Phase 4** — Payment (idempotent consumer by business key, Outbox-published outcomes)
 - [x] **Phase 5** — Booking + Saga (rich aggregate invariants, MassTransit orchestration, compensations, hold timeout, Redis-locked seat race)
 - [x] **Phase 6** — Notifications (MongoDB document consumer, templated, idempotent, history by user)
-- [ ] Phase 7 — Full observability
+- [x] **Phase 7** — Full observability (end-to-end trace across HTTP/gRPC/RabbitMQ, log↔trace correlation, Grafana dashboard, business metrics)
 - [ ] Phase 8 — Resilience & architecture tests
 - [ ] Phase 9 — CI/CD & Kubernetes

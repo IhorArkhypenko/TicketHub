@@ -35,7 +35,8 @@ services:
     container_name: tickethub-catalog
     environment:
       ASPNETCORE_ENVIRONMENT: Development
-      ASPNETCORE_URLS: http://+:8080
+      HttpPort: "8080"
+      GrpcPort: "8081"
       ConnectionStrings__CatalogDb: "Host=postgres;Port=5432;Database=catalog;Username=tickethub;Password=tickethub"
       ConnectionStrings__Redis: "redis:6379"
       Identity__Authority: http://identity:8080
@@ -46,6 +47,7 @@ services:
       Observability__Otlp__Endpoint: http://tempo:4317
     ports:
       - "5101:8080"
+      - "5111:8081"
     depends_on:
       postgres:
         condition: service_healthy
@@ -90,7 +92,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__BookingDb: "Host=postgres;Port=5432;Database=booking;Username=tickethub;Password=tickethub"
       Identity__Authority: http://identity:8080
-      Catalog__GrpcAddress: http://catalog:8080
+      Catalog__GrpcAddress: http://catalog:8081
       RabbitMq__Host: rabbitmq
       RabbitMq__Username: tickethub
       RabbitMq__Password: tickethub

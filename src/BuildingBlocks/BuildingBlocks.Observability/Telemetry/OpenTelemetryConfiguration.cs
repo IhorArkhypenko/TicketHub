@@ -34,7 +34,13 @@ public static class OpenTelemetryConfiguration
                 tracing
                     .SetResourceBuilder(resourceBuilder)
                     .AddAspNetCoreInstrumentation(options => options.RecordException = true)
-                    .AddHttpClientInstrumentation();
+                    .AddHttpClientInstrumentation()
+                    .AddGrpcClientInstrumentation()
+                    // Trace context flows through these so one request is a single end-to-end
+                    // trace across HTTP, gRPC, RabbitMQ (MassTransit) and the database (Npgsql).
+                    .AddSource("MassTransit")
+                    .AddSource("Npgsql")
+                    .AddSource(TicketHubTelemetry.SourceName);
 
                 configureTracing?.Invoke(tracing);
 
@@ -46,7 +52,9 @@ public static class OpenTelemetryConfiguration
                     .SetResourceBuilder(resourceBuilder)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddRuntimeInstrumentation();
+                    .AddRuntimeInstrumentation()
+                    .AddMeter("MassTransit")
+                    .AddMeter(TicketHubTelemetry.MeterName);
 
                 configureMetrics?.Invoke(metrics);
 

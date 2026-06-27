@@ -1,5 +1,6 @@
 using BuildingBlocks.Domain.Primitives;
 using Booking.Application.Abstractions;
+using Booking.Application.Observability;
 using Booking.Domain.Events;
 using Contracts.Events.Booking.V1;
 using MassTransit;
@@ -30,11 +31,13 @@ internal sealed class BookingUnitOfWork : IUnitOfWork
 {
     private readonly BookingDbContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
+    private readonly BookingMetrics _metrics;
 
-    public BookingUnitOfWork(BookingDbContext context, IPublishEndpoint publishEndpoint)
+    public BookingUnitOfWork(BookingDbContext context, IPublishEndpoint publishEndpoint, BookingMetrics metrics)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
+        _metrics = metrics;
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
@@ -51,6 +54,8 @@ internal sealed class BookingUnitOfWork : IUnitOfWork
             {
                 await _publishEndpoint.Publish(integrationEvent, integrationEvent.GetType(), cancellationToken);
             }
+
+            RecordMetric(domainEvent);
         }
 
         foreach (var entry in _context.ChangeTracker.Entries<BookingAggregate>())
@@ -68,4 +73,14 @@ internal sealed class BookingUnitOfWork : IUnitOfWork
         BookingRejectedDomainEvent e => new BookingRejected(e.BookingId, e.UserId, e.Reason, e.OccurredOnUtc),
         _ => null
     };
+
+    private void RecordMetric(IDomainEvent domainEvent)
+    {
+        switch (domainEvent)
+        {
+            case BookingConfirmedDomainEvent: _metrics.Confirmed(); break;
+            case BookingCancelledDomainEvent: _metrics.Cancelled(); break;
+            case BookingRejectedDomainEvent: _metrics.Rejected(); break;
+        }
+    }
 }

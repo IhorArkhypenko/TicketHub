@@ -1,6 +1,7 @@
 using BuildingBlocks.Application.Messaging;
 using BuildingBlocks.Domain.Results;
 using Booking.Application.Abstractions;
+using Booking.Application.Observability;
 using Booking.Domain;
 using Contracts.Events.Booking.V1;
 using BookingAggregate = Booking.Domain.Booking;
@@ -18,17 +19,20 @@ internal sealed class SubmitBookingCommandHandler : ICommandHandler<SubmitBookin
     private readonly IBookingRepository _bookings;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IEventPublisher _publisher;
+    private readonly BookingMetrics _metrics;
 
     public SubmitBookingCommandHandler(
         ISeatAvailabilityChecker seatChecker,
         IBookingRepository bookings,
         IUnitOfWork unitOfWork,
-        IEventPublisher publisher)
+        IEventPublisher publisher,
+        BookingMetrics metrics)
     {
         _seatChecker = seatChecker;
         _bookings = bookings;
         _unitOfWork = unitOfWork;
         _publisher = publisher;
+        _metrics = metrics;
     }
 
     public async Task<Result<Guid>> Handle(SubmitBookingCommand request, CancellationToken cancellationToken)
@@ -56,6 +60,7 @@ internal sealed class SubmitBookingCommandHandler : ICommandHandler<SubmitBookin
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        _metrics.Submitted();
         return booking.Id;
     }
 }
