@@ -1,0 +1,37 @@
+@page
+@model Identity.Api.Pages.Account.LoginModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TicketHub — Sign in</title>
+    <style>
+        body { font-family: system-ui, sans-serif; max-width: 360px; margin: 60px auto; }
+        label { display: block; margin: 12px 0 4px; }
+        input { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { margin-top: 16px; padding: 10px 16px; }
+        .error { color: #b00020; margin-top: 12px; }
+        .hint { color: #666; font-size: 13px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Sign in</h1>
+    <form method="post">
+        <input type="hidden" asp-for="ReturnUrl" />
+        <label asp-for="Input.Username">Email</label>
+        <input asp-for="Input.Username" autocomplete="username" />
+        <label asp-for="Input.Password">Password</label>
+        <input asp-for="Input.Password" type="password" autocomplete="current-password" />
+        <button type="submit">Sign in</button>
+        @if (!string.IsNullOrEmpty(Model.Error))
+        {
+            <div class="error">@Model.Error</div>
+        }
+    </form>
+    <div class="hint">Demo user: <code>alice@tickethub.local</code> / <code>Pass123$</code></div>
+</body>
+</html>

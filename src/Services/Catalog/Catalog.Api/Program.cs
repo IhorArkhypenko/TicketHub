@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using BuildingBlocks.Observability.HealthChecks;
 using BuildingBlocks.Observability.Logging;
+using BuildingBlocks.Observability.Security;
 using BuildingBlocks.Observability.ServiceDefaults;
 using BuildingBlocks.Observability.Telemetry;
 using Catalog.Api.Grpc;
@@ -20,6 +21,11 @@ builder.Services.AddTicketHubServiceDefaults();
 
 builder.Services.AddCatalogApplication();
 builder.Services.AddCatalogInfrastructure(builder.Configuration);
+
+builder.Services.AddTicketHubJwtAuth(
+    builder.Configuration,
+    audience: "catalog",
+    scope: "catalog.api");
 
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning(options =>
@@ -47,6 +53,9 @@ app.UseTicketHubServiceDefaults();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 app.MapGrpcService<CatalogSeatCheckService>();

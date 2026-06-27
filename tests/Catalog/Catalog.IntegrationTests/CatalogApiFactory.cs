@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
 using Xunit;
@@ -30,6 +33,13 @@ public sealed class CatalogApiFactory : WebApplicationFactory<Program>, IAsyncLi
         builder.UseSetting("ConnectionStrings:Redis", _redis.GetConnectionString());
         // Keep telemetry exporters from chattering at absent collectors during tests.
         builder.UseSetting("Observability:Loki:Endpoint", "http://localhost:13100");
+
+        // Replace JWT bearer with a test scheme so tests run without the Identity provider.
+        builder.ConfigureTestServices(services =>
+        {
+            services.AddAuthentication(TestAuthHandler.SchemeName)
+                .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(TestAuthHandler.SchemeName, _ => { });
+        });
     }
 
     public async Task InitializeAsync()

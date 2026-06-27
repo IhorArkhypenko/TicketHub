@@ -71,6 +71,16 @@
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
   </ItemGroup>
 
+  <!-- Identity / OAuth2 / Gateway -->
+  <ItemGroup>
+    <PackageVersion Include="Duende.IdentityServer" Version="7.0.8" />
+    <PackageVersion Include="Duende.IdentityServer.AspNetIdentity" Version="7.0.8" />
+    <PackageVersion Include="Duende.IdentityServer.EntityFramework" Version="7.0.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageVersion Include="Yarp.ReverseProxy" Version="2.2.0" />
+  </ItemGroup>
+
   <!-- Health checks for dependencies -->
   <ItemGroup>
     <PackageVersion Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />

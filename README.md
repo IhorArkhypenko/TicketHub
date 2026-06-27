@@ -54,7 +54,7 @@ credentials and how to run the full app stack.
 
 - [x] **Phase 0** — Skeleton & infrastructure (BuildingBlocks, service template, compose, observability)
 - [x] **Phase 1** — Catalog (Clean Architecture reference: EF Core, Redis cache-aside, REST+Swagger, gRPC, tests)
-- [ ] Phase 2 — Identity + Gateway
+- [x] **Phase 2** — Identity (Duende, OAuth2 + PKCE) + Gateway (YARP, edge JWT validation, rate limiting)
 - [ ] Phase 3 — Async backbone (RabbitMQ + Outbox/Inbox)
 - [ ] Phase 4 — Payment
 - [ ] Phase 5 — Booking + Saga (DDD-rich)

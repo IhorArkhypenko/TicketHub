@@ -2,6 +2,8 @@ using Asp.Versioning;
 using BuildingBlocks.Application.Messaging;
 using BuildingBlocks.Domain.Results;
 using BuildingBlocks.Observability.Errors;
+using BuildingBlocks.Observability.Security;
+using Microsoft.AspNetCore.Authorization;
 using Catalog.Application.Events;
 using Catalog.Application.Events.Commands.AddSession;
 using Catalog.Application.Events.Commands.CreateEvent;
@@ -39,10 +41,12 @@ public sealed class EventsController : ControllerBase
         return result.IsSuccess ? Ok(result.Value) : ApiResults.Problem(result.Error);
     }
 
-    /// <summary>Creates a new event.</summary>
+    /// <summary>Creates a new event. Requires a valid JWT with the catalog.api scope.</summary>
     [HttpPost]
+    [Authorize(Policy = JwtAuthenticationExtensions.ScopePolicy)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Guid>> CreateEvent(
         [FromBody] CreateEventCommand command,
         CancellationToken cancellationToken)
@@ -53,11 +57,13 @@ public sealed class EventsController : ControllerBase
             : ApiResults.Problem(result.Error);
     }
 
-    /// <summary>Adds a session (with its seats) to an event.</summary>
+    /// <summary>Adds a session (with its seats) to an event. Requires a valid JWT with the catalog.api scope.</summary>
     [HttpPost("{id:guid}/sessions")]
+    [Authorize(Policy = JwtAuthenticationExtensions.ScopePolicy)]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult<Guid>> AddSession(
         Guid id,
         [FromBody] AddSessionRequest request,

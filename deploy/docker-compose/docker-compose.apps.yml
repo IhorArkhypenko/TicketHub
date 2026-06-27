@@ -3,8 +3,31 @@ name: tickethub
 # Application services. Use together with the infrastructure compose file:
 #   docker compose -f docker-compose.yml -f docker-compose.apps.yml up -d --build
 # Services attach to the shared "tickethub" network defined in docker-compose.yml.
+#
+# Inside the cluster the token issuer is http://identity:8080 (IdentityServer IssuerUri),
+# and every resource validates against that same authority, so service-to-service auth is
+# consistent. Interactive browser PKCE through the published port is a local-dev concern.
 
 services:
+  identity:
+    build:
+      context: ../..
+      dockerfile: src/Services/Identity/Identity.Api/Dockerfile
+    container_name: tickethub-identity
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__IdentityDb: "Host=postgres;Port=5432;Database=identity;Username=tickethub;Password=tickethub"
+      IdentityServer__IssuerUri: http://identity:8080
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "5102:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks: [tickethub]
+
   catalog:
     build:
       context: ../..
@@ -15,6 +38,7 @@ services:
       ASPNETCORE_URLS: http://+:8080
       ConnectionStrings__CatalogDb: "Host=postgres;Port=5432;Database=catalog;Username=tickethub;Password=tickethub"
       ConnectionStrings__Redis: "redis:6379"
+      Identity__Authority: http://identity:8080
       Observability__Loki__Endpoint: http://loki:3100
       Observability__Otlp__Endpoint: http://tempo:4317
     ports:
@@ -24,9 +48,28 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      loki:
+      identity:
         condition: service_started
-      tempo:
+    networks: [tickethub]
+
+  gateway:
+    build:
+      context: ../..
+      dockerfile: src/Services/Gateway/Gateway/Dockerfile
+    container_name: tickethub-gateway
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      Identity__Authority: http://identity:8080
+      ReverseProxy__Clusters__catalog__Destinations__primary__Address: http://catalog:8080/
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "8080:8080"
+    depends_on:
+      catalog:
+        condition: service_started
+      identity:
         condition: service_started
     networks: [tickethub]
 
