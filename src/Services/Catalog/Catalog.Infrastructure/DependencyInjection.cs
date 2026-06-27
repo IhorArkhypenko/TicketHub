@@ -1,3 +1,4 @@
+using BuildingBlocks.Infrastructure.Locking;
 using BuildingBlocks.Infrastructure.Messaging;
 using BuildingBlocks.Observability.HealthChecks;
 using Catalog.Application.Abstractions;
@@ -36,7 +37,10 @@ public static class DependencyInjection
         services.AddSingleton<ICatalogCache, RedisCatalogCache>();
 
         services.AddScoped<IEventPublisher, EventPublisher>();
-        services.AddTicketHubMassTransit<CatalogDbContext>(configuration);
+        services.AddSingleton<IDistributedLock, RedisDistributedLock>();
+        services.AddTicketHubMassTransit<CatalogDbContext>(
+            configuration,
+            consumerAssemblies: typeof(Messaging.ReserveSeatConsumer).Assembly);
 
         services.AddTicketHubHealthChecks()
             .AddNpgSql(postgres, name: "postgres", tags: new[] { HealthCheckExtensions.ReadyTag })
