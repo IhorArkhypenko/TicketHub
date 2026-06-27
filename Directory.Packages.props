@@ -59,6 +59,11 @@
     <PackageVersion Include="StackExchange.Redis" Version="2.8.16" />
   </ItemGroup>
 
+  <!-- MongoDB -->
+  <ItemGroup>
+    <PackageVersion Include="MongoDB.Driver" Version="2.30.0" />
+  </ItemGroup>
+
   <!-- Messaging: MassTransit + RabbitMQ + EF Outbox/Inbox -->
   <ItemGroup>
     <PackageVersion Include="MassTransit" Version="8.3.0" />

@@ -110,6 +110,30 @@ services:
         condition: service_started
     networks: [tickethub]
 
+  notifications:
+    build:
+      context: ../..
+      dockerfile: src/Services/Notifications/Notifications.Api/Dockerfile
+    container_name: tickethub-notifications
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__Mongo: "mongodb://tickethub:tickethub@mongo:27017/?authSource=admin"
+      Mongo__Database: notifications
+      RabbitMq__Host: rabbitmq
+      RabbitMq__Username: tickethub
+      RabbitMq__Password: tickethub
+      Observability__Loki__Endpoint: http://loki:3100
+      Observability__Otlp__Endpoint: http://tempo:4317
+    ports:
+      - "5105:8080"
+    depends_on:
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks: [tickethub]
+
   gateway:
     build:
       context: ../..

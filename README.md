@@ -58,7 +58,7 @@ credentials and how to run the full app stack.
 - [x] **Phase 3** — Async backbone (MassTransit + RabbitMQ, Transactional Outbox/Inbox, versioned contracts)
 - [x] **Phase 4** — Payment (idempotent consumer by business key, Outbox-published outcomes)
 - [x] **Phase 5** — Booking + Saga (rich aggregate invariants, MassTransit orchestration, compensations, hold timeout, Redis-locked seat race)
-- [ ] Phase 6 — Notifications (MongoDB)
+- [x] **Phase 6** — Notifications (MongoDB document consumer, templated, idempotent, history by user)
 - [ ] Phase 7 — Full observability
 - [ ] Phase 8 — Resilience & architecture tests
 - [ ] Phase 9 — CI/CD & Kubernetes
