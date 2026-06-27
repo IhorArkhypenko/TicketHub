@@ -13,6 +13,8 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__CatalogDb: "Host=postgres;Port=5432;Database=catalog;Username=tickethub;Password=tickethub"
+      ConnectionStrings__Redis: "redis:6379"
       Observability__Loki__Endpoint: http://loki:3100
       Observability__Otlp__Endpoint: http://tempo:4317
     ports:

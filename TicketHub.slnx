@@ -6,8 +6,19 @@
     <Project Path="src/BuildingBlocks/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj" />
     <Project Path="src/BuildingBlocks/BuildingBlocks.Observability/BuildingBlocks.Observability.csproj" />
   </Folder>
+  <Folder Name="/src/Contracts/">
+    <Project Path="src/Contracts/Contracts.Protos/Contracts.Protos.csproj" />
+  </Folder>
   <Folder Name="/src/Services/" />
   <Folder Name="/src/Services/Catalog/">
     <Project Path="src/Services/Catalog/Catalog.Api/Catalog.Api.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Application/Catalog.Application.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Domain/Catalog.Domain.csproj" />
+    <Project Path="src/Services/Catalog/Catalog.Infrastructure/Catalog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Catalog/">
+    <Project Path="tests/Catalog/Catalog.IntegrationTests/Catalog.IntegrationTests.csproj" />
+    <Project Path="tests/Catalog/Catalog.UnitTests/Catalog.UnitTests.csproj" />
   </Folder>
 </Solution>

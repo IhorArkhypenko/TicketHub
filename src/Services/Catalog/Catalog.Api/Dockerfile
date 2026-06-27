@@ -4,6 +4,7 @@ WORKDIR /src
 
 COPY Directory.Build.props Directory.Packages.props nuget.config* ./
 COPY src/BuildingBlocks ./src/BuildingBlocks
+COPY src/Contracts ./src/Contracts
 COPY src/Services/Catalog ./src/Services/Catalog
 
 RUN dotnet restore src/Services/Catalog/Catalog.Api/Catalog.Api.csproj

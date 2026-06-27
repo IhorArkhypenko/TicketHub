@@ -1,0 +1,46 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Testcontainers.PostgreSql;
+using Testcontainers.Redis;
+using Xunit;
+
+namespace Catalog.IntegrationTests;
+
+/// <summary>
+/// Spins up real PostgreSQL and Redis in containers and hosts the Catalog API in-memory,
+/// so integration tests run against honest infrastructure. The app applies its EF migrations
+/// on startup against the throwaway database.
+/// </summary>
+public sealed class CatalogApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
+{
+    private readonly PostgreSqlContainer _postgres = new PostgreSqlBuilder()
+        .WithImage("postgres:16-alpine")
+        .WithDatabase("catalog")
+        .WithUsername("tickethub")
+        .WithPassword("tickethub")
+        .Build();
+
+    private readonly RedisContainer _redis = new RedisBuilder()
+        .WithImage("redis:7-alpine")
+        .Build();
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseSetting("ConnectionStrings:CatalogDb", _postgres.GetConnectionString());
+        builder.UseSetting("ConnectionStrings:Redis", _redis.GetConnectionString());
+        // Keep telemetry exporters from chattering at absent collectors during tests.
+        builder.UseSetting("Observability:Loki:Endpoint", "http://localhost:13100");
+    }
+
+    public async Task InitializeAsync()
+    {
+        await _postgres.StartAsync();
+        await _redis.StartAsync();
+    }
+
+    public new async Task DisposeAsync()
+    {
+        await _postgres.DisposeAsync();
+        await _redis.DisposeAsync();
+    }
+}

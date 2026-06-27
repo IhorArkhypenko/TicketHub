@@ -53,7 +53,7 @@ credentials and how to run the full app stack.
 ## Progress
 
 - [x] **Phase 0** — Skeleton & infrastructure (BuildingBlocks, service template, compose, observability)
-- [ ] Phase 1 — Catalog (Clean Architecture reference: EF Core, Redis, REST, gRPC)
+- [x] **Phase 1** — Catalog (Clean Architecture reference: EF Core, Redis cache-aside, REST+Swagger, gRPC, tests)
 - [ ] Phase 2 — Identity + Gateway
 - [ ] Phase 3 — Async backbone (RabbitMQ + Outbox/Inbox)
 - [ ] Phase 4 — Payment

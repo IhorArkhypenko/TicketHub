@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "Contracts.Protos.Catalog";
+
+package catalog;
+
+// Synchronous seat pre-check used by Booking before starting the Saga.
+service CatalogSeatCheck {
+  rpc CheckSeat (CheckSeatRequest) returns (CheckSeatReply);
+}
+
+message CheckSeatRequest {
+  string seat_id = 1;
+}
+
+message CheckSeatReply {
+  bool exists = 1;
+  bool available = 2;
+  string session_id = 3;
+  double amount = 4;
+  string currency = 5;
+}
