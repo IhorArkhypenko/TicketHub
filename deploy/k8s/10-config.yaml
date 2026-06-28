@@ -12,6 +12,7 @@ data:
   IdentityServer__IssuerUri: "http://identity:8080"
   Catalog__GrpcAddress: "http://catalog:8081"
   ReverseProxy__Clusters__catalog__Destinations__primary__Address: "http://catalog:8080/"
+  ReverseProxy__Clusters__booking__Destinations__primary__Address: "http://booking:8080/"
   Observability__Loki__Endpoint: "http://loki:3100"
   Observability__Otlp__Endpoint: "http://tempo:4317"
 ---

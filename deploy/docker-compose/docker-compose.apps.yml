@@ -146,12 +146,15 @@ services:
       ASPNETCORE_URLS: http://+:8080
       Identity__Authority: http://identity:8080
       ReverseProxy__Clusters__catalog__Destinations__primary__Address: http://catalog:8080/
+      ReverseProxy__Clusters__booking__Destinations__primary__Address: http://booking:8080/
       Observability__Loki__Endpoint: http://loki:3100
       Observability__Otlp__Endpoint: http://tempo:4317
     ports:
       - "8080:8080"
     depends_on:
       catalog:
+        condition: service_started
+      booking:
         condition: service_started
       identity:
         condition: service_started
